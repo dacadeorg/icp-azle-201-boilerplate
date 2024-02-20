@@ -69,8 +69,8 @@ const ORDER_TTL_MIN = 2n;
 const ORDER_TTL = ORDER_TTL_MIN * 60n;
 
 // Services
-const LEDGER_ID = "ryjl3-tyaaa-aaaaa-aaaba-cai";
-const ledgerCanister = Ledger(Principal.fromText(LEDGER_ID));
+const LEDGER_PRINCIPAL_ID = "ryjl3-tyaaa-aaaaa-aaaba-cai";
+const ledgerCanister = Ledger(Principal.fromText(LEDGER_PRINCIPAL_ID));
 const DEFAULT_SUBACCOUNT = 0;
 
 // steup Canister object
