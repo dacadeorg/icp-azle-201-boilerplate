@@ -81,3 +81,37 @@ Otherwise, these changes won't be reflected in IDL's and won't work when called 
 
 ### Marketplace frontend canister
 `dfx deploy dfinity_js_frontend` - deployes the frontend app for the `dfinity_js_backend` canister on IC.
+
+### Notes for WSL/Ubuntu 22.04.4 + dfx 0.17 + Azle 0.19 
+If you have just finished installed your linux distro using `wsl install`, be sure to also install the following apt packages: build-essential, libssl-dev and clang.
+
+To check which linux distro you're running you can use `lsb_release -a`.
+
+## Improvements
+### Improvement: add product attributes
+
+Seller is able to add product attributes to a product in order to differentiate with other sellers offering the same product.
+
+### Improvement: compare products from different sellers
+Able to select and compare products (emphasis on price differences).
+
+### Improvement: multiple products for an order
+
+Able to add multiple products (from the same seller) to a single order.
+- Tally total order amount.
+Able to add multiple products (from different sellers) to a single order.
+- Tally total order amount.
+- Pay order and automatic payment to all sellers.
+
+## New Features
+### New Feature: Rewards
+
+Incentivize: 
+- Claim reward points for each purchase (bought).
+- Claim reward points for each sell (sold).
+- Redeem reward points for store credit (Points -> LCIP).
+- Pay with reward points (burn): 
+  - either swap to LICP for Rewards Treasury or,
+  - burn into cycles canister operation
+
+Rewards canister: claim, redeem, get_exchange_rate, burn.

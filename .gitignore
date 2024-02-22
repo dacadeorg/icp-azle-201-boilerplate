@@ -23,3 +23,6 @@ dist/
 
 ledger.did
 ledger-canister.wasm
+
+# dev notes
+notes

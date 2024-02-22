@@ -9,9 +9,8 @@ import {
     binaryAddressFromAddress, binaryAddressFromPrincipal, Block, hexAddressFromPrincipal,
     Ledger,
 } from "azle/canisters/ledger";
-// import {} from "hashcode"; // hashcode
 import { v4 as uuidv4 } from 'uuid';
-import HashCode from 'ts-hashcode';
+import { sha256 } from 'js-sha256';
 
 // Data
 const Product = Record({
@@ -216,7 +215,7 @@ async function verifyPaymentInternal(receiver: Principal, amount: nat64, block: 
 
 // helpers
 function hash(input: any): nat64 {
-    return BigInt(Math.abs(HashCode(input)));
+    return BigInt(sha256(input));
 }
 
 // workaround for uuid to work with Azle
