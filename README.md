@@ -87,8 +87,17 @@ If you have just finished installed your linux distro using `wsl install`, be su
 
 To check which linux distro you're running you can use `lsb_release -a`.
 
+## Bug-Fixes
+- Better error handling when adding new products.
+- Fixed condition for Notification popup when an error occured adding a product. 
+
 ## Improvements
-### Improvement: add product attributes
+### Store images as Blobs for products
+
+- When adding products you can upload Product images directly (max 100k pngs);
+
+
+### Improvement: add custom product attributes
 
 Seller is able to add product attributes to a product in order to differentiate with other sellers offering the same product.
 

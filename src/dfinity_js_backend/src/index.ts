@@ -189,6 +189,11 @@ export default Canister({
      }),
 
      // TODO: makePayment, pay from Marketplace canister escrow account to sellers
+
+     getAddressFromPrincipal: query([Principal], text, (principal) => {
+        return hexAddressFromPrincipal(principal, DEFAULT_SUBACCOUNT);
+     }),
+
 });
 
 async function verifyPaymentInternal(receiver: Principal, amount: nat64, block: nat64, memo: nat64): Promise<bool> {
@@ -215,7 +220,7 @@ async function verifyPaymentInternal(receiver: Principal, amount: nat64, block: 
 
 // helpers
 function hash(input: any): nat64 {
-    return BigInt(sha256(input));
+    return BigInt.asUintN(64, BigInt(`0x${sha256(input)}`));
 }
 
 // workaround for uuid to work with Azle
