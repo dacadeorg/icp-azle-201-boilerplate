@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
 import { Principal } from "@dfinity/principal";
+import { e8sToIcpDecimal } from "../../utils/ledger";
 
 const Product = ({ product, buy }) => {
   const { id, price, title, description, location, attachmentUrl, seller, soldAmount } =
@@ -39,7 +40,7 @@ const Product = ({ product, buy }) => {
             onClick={triggerBuy}
             className="w-100 py-3"
           >
-            Buy for {(price / BigInt(10**8)).toString()} LICP
+            Buy for {e8sToIcpDecimal(price)} LICP
           </Button>
         </Card.Body>
       </Card>

@@ -20,7 +20,10 @@ const App = function AppWrapper() {
 
   const getBalance = useCallback(async () => {
     if (isAuthenticated) {
-      setBalance(await principalBalance());
+      console.log(`authenticated. get balance`);
+      const myBalance = await principalBalance();
+      console.log(`myBalance. ${myBalance}`);
+      setBalance(myBalance);
     }
   });
 

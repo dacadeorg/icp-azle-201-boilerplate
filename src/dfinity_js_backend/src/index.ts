@@ -267,6 +267,6 @@ function generateCorrelationId(productId: text): nat64 {
 function discardByTimeout(memo: nat64, delay: Duration) {
     ic.setTimer(delay, () => {
         const order = pending.remove(memo);
-        console.log(`Order discarded ${order.Some.memo}`);
+        console.log(`Order discarded ${order.Some?.memo}`);
     });
 }

@@ -24,10 +24,22 @@ export async function transferICP(sellerAddress, amount, memo) {
 
 export async function balance() {
     const ledgerCanister = window.canister.ledger;
-    const address = await window.canister.marketplace.getAddressFromPrincipal(window.auth.principal);
+    const accountId = await window.canister.marketplace.getAddressFromPrincipal(window.auth.principal);
 
-    console.log(`${address}`);
-    const balance = await ledgerCanister.account_balance_dfx({account: address});
+    const balance = await ledgerCanister.account_balance_dfx({account: accountId});
+    console.log(`Principal: ${window.auth.principal}. Account: ${accountId}. balance ${balance.e8s}`)
 
-    return (balance?.e8s / BigInt(10**8)).toString();
+    // return (balance?.e8s / BigInt(100000000n)).toString();
+    // return balance?.e8s.toString();
+    return e8sToIcpDecimal(balance?.e8s);
+}
+
+export function e8sToIcpDecimal(e8sBigInt) {
+    // Convert the e8s value to a decimal string representation of ICP
+    const icpString = (e8sBigInt / BigInt(1e8)).toString() + '.' + (e8sBigInt % BigInt(1e8)).toString().padStart(8, '0');
+    
+    // Remove trailing zeros from the fractional part
+    const formattedIcpString = icpString.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.$/, "");
+    
+    return formattedIcpString;
 }
