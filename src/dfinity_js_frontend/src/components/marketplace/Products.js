@@ -32,10 +32,15 @@ const Products = () => {
       setLoading(true);
       const priceStr = data.price;
       data.price = parseInt(priceStr, 10) * 10**8;
-      createProduct(data).then((resp) => {
-        getProducts();
-      });
-      toast(<NotificationSuccess text="Product added successfully." />);
+      createProduct(data)
+        .then((resp) => { 
+          getProducts(); 
+          toast(<NotificationSuccess text="Product added successfully." />); 
+        })
+        .catch((error) => {
+          console.log({ error });
+          toast(<NotificationError text="Failed to create a product." />);
+        });
     } catch (error) {
       console.log({ error });
       toast(<NotificationError text="Failed to create a product." />);
@@ -48,13 +53,22 @@ const Products = () => {
   const buy = async (id) => {
     try {
       setLoading(true);
-      await buyProduct({
-        id
-      }).then((resp) => {
+      await buyProduct({id})
+      .then((resp) => {
         getProducts();
         toast(<NotificationSuccess text="Product bought successfully" />);
+      })
+      .catch((error) => {
+        if ('InsufficientFunds' in error) {
+          toast(<NotificationError text="Insufficient funds available to buy. Check your Wallet's balance." />);
+        } else {
+          toast(<NotificationError text="Failed to purchase product." />);
+        }
+        console.log({ error });
+        
       });
     } catch (error) {
+      console.log({ error });
       toast(<NotificationError text="Failed to purchase product." />);
     } finally {
       setLoading(false);

@@ -60,7 +60,7 @@ const InfoMessage = Variant({
 
 // stable storage
 const productsDb = StableBTreeMap(0, text, Product); //StableBTreeMap<text, Product>(0);
-const orders = StableBTreeMap(1, Principal,Order);
+const orders = StableBTreeMap(1, Principal, Order);
 const pending = StableBTreeMap(2, nat64, Order);
 
 // keep order alive for how long? (products on-hold) 120secs
@@ -161,14 +161,18 @@ export default Canister({
             const paymentVerified = await verifyPaymentInternal(seller, price, block, memo);
             if (!paymentVerified) {
                 return Err({ PaymentFailed: `cannot complete purchase. payment failed, memo=${memo}` });
+            } else {
+                ic.print(`paymentVerified`);
             }
 
             const pendingOrderOpt = pending.remove(memo);
             if ("None" in pendingOrderOpt) {
+                ic.print("pending order not found");
                 return Err({ PendingOrderNotFound: `cannot complete purchase. No pending order with id=${id}` });
             }
 
             const order = pendingOrderOpt.Some; 
+            ic.print(`updating order with productId: ${order.productId} in block: ${block}`)
             const updatedOrder = { ...order, status: { Completed: null }, paid_at_block: Some(block) };
 
             // update product
@@ -176,10 +180,19 @@ export default Canister({
             if("None" in productOpt) {
                 return Err({ ProductNotFound: `Product  id=${id} not found`});
             }
-            const product = productOpt.Some; 
-            product.soldAmount += 1; 
+
+            const product = productOpt.Some;
+
+            ic.print(`updating sold amount`)
+            product.soldAmount += 1n; // DONT USE "1"!!!!!! because nat64 -> BigInt conversion requires using "1n"
+            
+            ic.print(`updating productsDb`)
             productsDb.insert(product.id, product);
+            
+            ic.print(`updating orders`)
             orders.insert(ic.caller(), updatedOrder);
+
+            ic.print(`updated order saved, paid_at_block: ${updatedOrder.paid_at_block}`);
 
             return Ok(updatedOrder);
      }),
@@ -201,18 +214,27 @@ async function verifyPaymentInternal(receiver: Principal, amount: nat64, block: 
     
     const tx = blockData.blocks.find((block) => {
         if ("None" in block.transaction.operation) {
+            ic.print(`Block: ${block}. No tx found. `)
             return false;
         }
 
         const operation = block.transaction.operation.Some;
+        //ic.print(`operation: ${operation.Transfer}`);
+
         const senderAddress = binaryAddressFromPrincipal(ic.caller(), DEFAULT_SUBACCOUNT);
         const receiverAddress = binaryAddressFromPrincipal(receiver, DEFAULT_SUBACCOUNT);
 
         // is there a tx with same memo + from/to transfer + amount?
-        return block.transaction.memo == memo &&
+        ic.print(`memo: ${block.transaction.memo}.`);
+
+        let isFound = block.transaction.memo == memo &&
             hash(senderAddress) == hash(operation.Transfer?.from) &&
             hash(receiverAddress) == hash(operation.Transfer?.to) &&
             amount == operation.Transfer?.amount.e8s;
+
+        ic.print(`isFound: ${isFound}`);
+
+        return isFound;
     });
 
     return tx ? true : false;    
@@ -245,6 +267,6 @@ function generateCorrelationId(productId: text): nat64 {
 function discardByTimeout(memo: nat64, delay: Duration) {
     ic.setTimer(delay, () => {
         const order = pending.remove(memo);
-        console.log(`Order discarded ${order}`);
+        console.log(`Order discarded ${order.Some.memo}`);
     });
 }

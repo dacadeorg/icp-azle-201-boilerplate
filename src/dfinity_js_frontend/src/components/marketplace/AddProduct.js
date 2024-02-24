@@ -4,11 +4,11 @@ import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 
 const AddProduct = ({ save }) => {
   const [title, setTitle] = useState("");
-  const [attachmentURL, setImage] = useState("");
+  const [attachmentUrl, setAttachmentUrl] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
-  const isFormFilled = () => title && attachmentURL && description && location && price;
+  const isFormFilled = () => title && attachmentUrl && description && location && price;
 
   const [show, setShow] = useState(false);
 
@@ -23,7 +23,7 @@ const AddProduct = ({ save }) => {
         className="rounded-pill px-0"
         style={{ width: "38px" }}
       >
-        <i class="bi bi-plus"></i>
+        <i className="bi bi-plus"></i>
       </Button>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
@@ -53,7 +53,7 @@ const AddProduct = ({ save }) => {
                 type="text"
                 placeholder="Image URL"
                 onChange={(e) => {
-                  setImage(e.target.value);
+                  setAttachmentUrl(e.target.value);
                 }}
               />
             </FloatingLabel>
@@ -107,13 +107,11 @@ const AddProduct = ({ save }) => {
             variant="dark"
             disabled={!isFormFilled()}
             onClick={() => {
-              save({
-                title,
-                attachmentURL,
-                description,
-                location,
-                price,
-              });
+              let newProduct = {
+                title, attachmentUrl, description, location, price,
+              };
+
+              save(newProduct);
               handleClose();
             }}
           >

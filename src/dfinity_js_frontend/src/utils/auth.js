@@ -1,6 +1,6 @@
 import { AuthClient } from "@dfinity/auth-client";
 
-const IDENTITY_CANISTER_ID = "bd3sg-teaaa-aaaaa-qaaba-cai";
+const IDENTITY_CANISTER_ID = "be2us-64aaa-aaaaa-qaabq-cai";
 const IDENTITY_PROVIDER_URL = `http://localhost:4943/`;
 const IDENTITY_PROVIDER_ENDPOINT = `#authorize`;
 const IDENTITY_PROVIDER = `${IDENTITY_PROVIDER_URL}?canisterId=${IDENTITY_CANISTER_ID}${IDENTITY_PROVIDER_ENDPOINT}`;

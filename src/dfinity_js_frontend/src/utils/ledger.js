@@ -12,12 +12,22 @@ export async function transferICP(sellerAddress, amount, memo) {
         created_at_time: []
     });
 
-    return result.Ok;
+    // check errors: InsufficientFunds
+    if ('Err' in result) {
+        console.log(`Error transferring: ${result.Err}`);
+        throw result.Err;
+    }
+
+    // result.Ok = blockIdx
+    return result.Ok; 
 }
 
 export async function balance() {
-    const canister = window.canister.ledger;
+    const ledgerCanister = window.canister.ledger;
     const address = await window.canister.marketplace.getAddressFromPrincipal(window.auth.principal);
-    const balance = await canister.account.balance_dfx({account: address});
+
+    console.log(`${address}`);
+    const balance = await ledgerCanister.account_balance_dfx({account: address});
+
     return (balance?.e8s / BigInt(10**8)).toString();
 }

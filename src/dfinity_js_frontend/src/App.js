@@ -45,6 +45,9 @@ const App = function AppWrapper() {
                 />
               </Nav.Item>
             </Nav>
+            <main>
+              <Products />
+            </main>
           </Container>
         ) 
         : ( <Cover name="Street Food" login={login} coverImg={coverImg} />)}

@@ -4,7 +4,7 @@ import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
 import { Principal } from "@dfinity/principal";
 
 const Product = ({ product, buy }) => {
-  const { id, price, title, description, location, attachmentURL, seller, soldAmount } =
+  const { id, price, title, description, location, attachmentUrl, seller, soldAmount } =
     product;
 
   const triggerBuy = () => {
@@ -23,7 +23,7 @@ const Product = ({ product, buy }) => {
           </Stack>
         </Card.Header>
         <div className=" ratio ratio-4x3">
-          <img src={attachmentURL} alt={title} style={{ objectFit: "cover" }} />
+          <img src={attachmentUrl} alt={title} style={{ objectFit: "cover" }} />
         </div>
         <Card.Body className="d-flex  flex-column text-center">
           <Card.Title>{title}</Card.Title>
@@ -39,7 +39,7 @@ const Product = ({ product, buy }) => {
             onClick={triggerBuy}
             className="w-100 py-3"
           >
-            Buy for {(price / BigInt(10**8)).toString()} ICP
+            Buy for {(price / BigInt(10**8)).toString()} LICP
           </Button>
         </Card.Body>
       </Card>
