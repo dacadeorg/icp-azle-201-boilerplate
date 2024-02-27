@@ -16,7 +16,7 @@ const Product = ({ product, buy }) => {
     let priceString = e8sToIcpDecimal(price);
     // check for decimal part
     let decimals = priceString.split('.').pop();
-    console.log(`decimals: ${decimals}`);    
+    // console.log(`decimals: ${decimals}`);    
 
     return Number.parseInt(decimals) === 0 ? Number.parseInt(priceString) : priceString;
   };

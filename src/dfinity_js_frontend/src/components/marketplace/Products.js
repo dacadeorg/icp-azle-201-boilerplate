@@ -12,7 +12,7 @@ import {
 } from "../../utils/marketplace";
 import { DecimalToIcpe8s } from "../../utils/ledger";
 
-const Products = () => {
+const Products = ({ onBought }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -58,6 +58,9 @@ const Products = () => {
       await buyProduct({id})
         .then((resp) => {
           getProducts();
+          // onBought
+          onBought();
+          
           toast(<NotificationSuccess text="Product bought successfully" />);
         })
         .catch((error) => {
@@ -90,10 +93,10 @@ const Products = () => {
             <AddProduct save={addProduct} />
           </div>
           <Row xs={1} sm={2} lg={3} className="g-3  mb-5 g-xl-4 g-xxl-5">
-            {products.map((_product) => (
+            {products.map((product) => (
               <Product
                 product={{
-                  ..._product,
+                  ...product,
                 }}
                 buy={buy}
               />

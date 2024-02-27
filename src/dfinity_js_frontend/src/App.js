@@ -18,14 +18,13 @@ const App = function AppWrapper() {
 
   console.log(`▶ App()`);
   
-  // refresh balance
-  // useEffect(() =>{
-  // }, [])
+  const updateBalance = () => {
+    if (isAuthenticated) {
+      console.log(`💲 updating balance`);
+      principalBalance().then((updatedBalance) => setBalance(updatedBalance));
+  }};
 
-  if (isAuthenticated) {
-    console.log(`💲 updating balance`);
-    principalBalance().then((updatedBalance) => setBalance(updatedBalance));
-  }
+  updateBalance();
 
   return (
       <>
@@ -43,7 +42,7 @@ const App = function AppWrapper() {
               </Nav.Item>
             </Nav>
             <main>
-              <Products />
+              <Products onBought={updateBalance} />
             </main>
           </Container>
         ) 
