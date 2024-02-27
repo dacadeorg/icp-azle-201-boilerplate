@@ -10,6 +10,7 @@ import {
   getProducts as getProductList,
   createProduct, buyProduct
 } from "../../utils/marketplace";
+import { DecimalToIcpe8s } from "../../utils/ledger";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -31,7 +32,8 @@ const Products = () => {
     try {
       setLoading(true);
       const priceStr = data.price;
-      data.price = parseInt(priceStr, 10) * 10**8;
+      // convert decimal to e8s
+      data.price = DecimalToIcpe8s(priceStr); // parseInt(priceStr, 10) * 10**8;
       createProduct(data)
         .then((resp) => { 
           getProducts(); 
@@ -54,19 +56,19 @@ const Products = () => {
     try {
       setLoading(true);
       await buyProduct({id})
-      .then((resp) => {
-        getProducts();
-        toast(<NotificationSuccess text="Product bought successfully" />);
-      })
-      .catch((error) => {
-        if ('InsufficientFunds' in error) {
-          toast(<NotificationError text="Insufficient funds available to buy. Check your Wallet's balance." />);
-        } else {
-          toast(<NotificationError text="Failed to purchase product." />);
-        }
-        console.log({ error });
-        
-      });
+        .then((resp) => {
+          getProducts();
+          toast(<NotificationSuccess text="Product bought successfully" />);
+        })
+        .catch((error) => {
+          if ('InsufficientFunds' in error) {
+            toast(<NotificationError text="Insufficient funds available to buy. Check your Wallet's balance." />);
+          } else {
+            toast(<NotificationError text="Failed to purchase product." />);
+          }
+          console.log({ error });
+          
+        });
     } catch (error) {
       console.log({ error });
       toast(<NotificationError text="Failed to purchase product." />);

@@ -12,12 +12,20 @@ const Product = ({ product, buy }) => {
     buy(id);
   };
 
+  const displayPrice = (price) => {
+    let priceString = e8sToIcpDecimal(price);
+    // check for decimal part
+    let decimals = priceString.split('.').pop();
+    console.log(`decimals: ${decimals}`);    
+
+    return Number.parseInt(decimals) === 0 ? Number.parseInt(priceString) : priceString;
+  };
+
   return (
     <Col key={id}>
       <Card className=" h-100">
-        <Card.Header>
+        <Card.Header as="h5">
           <Stack direction="horizontal" gap={2}>
-            <span className="font-monospace text-secondary">{Principal.from(seller).toText()}</span>
             <Badge bg="secondary" className="ms-auto">
               {soldAmount.toString()} Sold
             </Badge>
@@ -33,14 +41,14 @@ const Product = ({ product, buy }) => {
             <span>{location}</span>
           </Card.Text>
           <Card.Text className="text-secondary">
-            <span>{Principal.from(seller).toText()}</span>
+            <span>Seller: {Principal.from(seller).toText()}</span>
           </Card.Text>
           <Button
             variant="outline-dark"
             onClick={triggerBuy}
             className="w-100 py-3"
           >
-            Buy for {e8sToIcpDecimal(price)} LICP
+            Buy for {displayPrice(price)} LICP
           </Button>
         </Card.Body>
       </Card>

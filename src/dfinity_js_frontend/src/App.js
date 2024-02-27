@@ -3,8 +3,8 @@ import { Container, Nav } from "react-bootstrap";
 import "./App.css";
 import coverImg from "./assets/img/sandwich.jpg"
 //
-import { login, logout as destroy } from "./utils/auth";
 import { balance as principalBalance } from "./utils/ledger";
+import { login as iiLogin, logout as iiLogout } from "./utils/auth";
 //
 import Products from "./components/marketplace/Products";
 import Wallet from "./components/Wallet";
@@ -14,22 +14,18 @@ import { Notification } from "./components/utils/Notifications";
 
 const App = function AppWrapper() {
   const isAuthenticated = window.auth.isAuthenticated; 
-  const principal = window.auth.principalText;
-
   const [balance, setBalance] = useState("0");
 
-  const getBalance = useCallback(async () => {
-    if (isAuthenticated) {
-      console.log(`authenticated. get balance`);
-      const myBalance = await principalBalance();
-      console.log(`myBalance. ${myBalance}`);
-      setBalance(myBalance);
-    }
-  });
+  console.log(`▶ App()`);
+  
+  // refresh balance
+  // useEffect(() =>{
+  // }, [])
 
-  useEffect(() => {
-    getBalance();
-  }, [getBalance]);
+  if (isAuthenticated) {
+    console.log(`💲 updating balance`);
+    principalBalance().then((updatedBalance) => setBalance(updatedBalance));
+  }
 
   return (
       <>
@@ -40,12 +36,10 @@ const App = function AppWrapper() {
             <Nav className="justify-content-end pt-3 pb-5">
               <Nav.Item>
                 <Wallet
-                  principal={principal}
                   balance={balance}
-                  symbol={"LICP"}
                   isAuthenticated={isAuthenticated}
-                  destroy={destroy}
-                />
+                  iiLogout={iiLogout}
+                />                
               </Nav.Item>
             </Nav>
             <main>
@@ -53,9 +47,7 @@ const App = function AppWrapper() {
             </main>
           </Container>
         ) 
-        : ( <Cover name="Street Food" login={login} coverImg={coverImg} />)}
-
-        <h1 className="text-center">ICP 201 Boilerplate</h1>
+        : ( <Cover title="Street Food" login={iiLogin} coverImg={coverImg} />)}
       </>
   );
 };

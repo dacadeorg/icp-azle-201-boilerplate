@@ -92,6 +92,11 @@ To check which linux distro you're running you can use `lsb_release -a`.
 - Fixed condition for Notification popup when an error occured adding a product. 
 
 ## Improvements
+### Multi-token support (wallet and product listings)
+
+Show all available tokens in Wallet. 
+Allow adding products with price in a different token.
+
 ### Store images as Blobs for products
 
 - When adding products you can upload Product images directly (max 100k pngs);

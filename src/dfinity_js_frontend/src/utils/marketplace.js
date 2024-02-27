@@ -25,7 +25,7 @@ export async function buyProduct(product) {
     const sellerAddress = await marketplaceCanister.getAddressFromPrincipal(sellerPrincipal);
     const block = await transferICP(sellerAddress, orderResponse.Ok.price, orderResponse.Ok.memo);
 
-    console.log(`block ${block}; memo: ${orderResponse.Ok.memo}`);
+    console.log(`block ${block}, memo: ${orderResponse.Ok.memo}, price: ${orderResponse.Ok.price}`);
 
     await marketplaceCanister.completePurchase(sellerPrincipal, product.id, orderResponse.Ok.price, block, orderResponse.Ok.memo);
 }

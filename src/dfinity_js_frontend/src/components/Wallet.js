@@ -1,8 +1,31 @@
 import React from "react";
 import { Dropdown, Stack } from "react-bootstrap";
 
-const Wallet = ({ principal, balance, symbol, isAuthenticated, destroy }) => {
+
+const Wallet = ({ balance, isAuthenticated, iiLogout }) => {
   if (isAuthenticated) {
+    const symbol= "LICP"
+    const principal = window.auth.principalText;
+
+    
+
+    // const getBalance = useCallback(async () => {
+    //   console.log(`💲 getBalance`);
+
+    //   if (isAuthenticated) {
+    //     const newBalance = await principalBalance();
+    //     console.log(`oldBalance: ${balance}. newBalance. ${newBalance}`);
+
+    //     setBalance(newBalance);
+    //   }
+    // }, [principalBalance]);
+
+    console.log(`✈ wallet setup complete`);
+
+    // useEffect(() => {
+      
+    // });    
+
     return (
       <>
         <Dropdown>
@@ -29,7 +52,7 @@ const Wallet = ({ principal, balance, symbol, isAuthenticated, destroy }) => {
               as="button"
               className="d-flex align-items-center"
               onClick={() => {
-                destroy();
+                iiLogout();
               }}
             >
               <i className="bi bi-box-arrow-right me-2 fs-4" />
