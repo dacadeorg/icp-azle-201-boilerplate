@@ -4,14 +4,14 @@ import AddProduct from "./AddProduct";
 import Product from "./Product";
 import Loader from "../utils/Loader";
 import { Row } from "react-bootstrap";
-
 import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {
   getProducts as getProductList,
   createProduct, buyProduct
 } from "../../utils/marketplace";
+import Wallet from "../Wallet";
 
-const Products = () => {
+const Products = (tokenSymbol) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +31,7 @@ const Products = () => {
     try {
       setLoading(true);
       const priceStr = data.price;
-      data.price = parseInt(priceStr, 10) * 10**8;
+      data.price = parseInt(priceStr, 10);
       createProduct(data).then((resp) => {
         getProducts();
       });
@@ -44,12 +44,11 @@ const Products = () => {
     }
   };
 
-  //  function to initiate transaction
-  const buy = async (id) => {
+  const buy = async (id, price) => {
     try {
       setLoading(true);
       await buyProduct({
-        id
+        id, price
       }).then((resp) => {
         getProducts();
         toast(<NotificationSuccess text="Product bought successfully" />);
@@ -66,28 +65,29 @@ const Products = () => {
   }, []);
 
   return (
-    <>
-      {!loading ? (
-        <>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="fs-4 fw-bold mb-0">Street Food</h1>
-            <AddProduct save={addProduct} />
-          </div>
-          <Row xs={1} sm={2} lg={3} className="g-3  mb-5 g-xl-4 g-xxl-5">
-            {products.map((_product) => (
-              <Product
-                product={{
-                  ..._product,
-                }}
-                buy={buy}
-              />
-            ))}
-          </Row>
-        </>
-      ) : (
-        <Loader />
-      )}
-    </>
+      <>
+        {!loading ? (
+            <>
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1 className="fs-4 fw-bold mb-0">Street Food</h1>
+                <AddProduct save={addProduct} />
+              </div>
+              <Row xs={1} sm={2} lg={3} className="g-3  mb-5 g-xl-4 g-xxl-5">
+                {products.map((_product) => (
+                    <Product
+                        tokemMetadata={tokenSymbol}
+                        product={{
+                          ..._product,
+                        }}
+                        buy={buy}
+                    />
+                ))}
+              </Row>
+            </>
+        ) : (
+            <Loader />
+        )}
+      </>
   );
 };
 

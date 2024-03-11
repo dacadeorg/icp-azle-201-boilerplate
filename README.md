@@ -7,8 +7,6 @@ ICP Azle 201 Boilerplate is a comprehensive project setup designed to streamline
 - **React.js Setup:** The boilerplate comes with a well-structured React.js setup, making it easy to manage your frontend infrastructure.
 - **ICP Canister:** ICP Canister integration is included, offering a powerful way to manage data and interactions on the Internet Computer.
 
-**[Read the Getting Started Guide](link-to-your-tutorial)**
-
 ## Things to be explained in the course:
 1. What is Ledger? More details here: https://internetcomputer.org/docs/current/developer-docs/integrations/ledger/
 2. What is Internet Identity? More details here: https://internetcomputer.org/internet-identity
@@ -17,6 +15,8 @@ ICP Azle 201 Boilerplate is a comprehensive project setup designed to streamline
 
 ## Getting started
 
+To get started developing in the browser, click this button:
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/dacadeorg/icp-azle-201)
 
 If you rather want to use GitHub Codespaces, click this button instead:
@@ -24,6 +24,12 @@ If you rather want to use GitHub Codespaces, click this button instead:
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dacadeorg/icp-azle-201?quickstart=1)
 
 **NOTE**: After deploying your canisters in GitHub Codespaces, run `./canister_urls.py` and click the links that are shown there.
+
+If you prefer running VS Code locally and not in the browser, click "Codespaces: ..." or "Gitpod" in the bottom left corner and select "Open in VS Code" in the menu that appears.
+If prompted, proceed by installing the recommended plugins for VS Code.
+
+To develop fully locally, first install [Docker](https://www.docker.com/get-started/) and [VS Code](https://code.visualstudio.com/) and start them on your machine.
+Next, click the following button to open the dev container locally:
 
 [![Open locally in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/dacadeorg/icp-azle-201)
 
@@ -58,26 +64,35 @@ Switch to the minter identity:
 `dfx identity use minter`
 
 Transfer ICP:
-`dfx ledger transfer <ADDRESS>  --memo 0 --icp 100 --fee 0`
+`dfx ledger transfer <ADDRESS> --memo 0 --icp 100 --fee 0`
 where:
 - `--memo` is some correlation id that can be set to identify some particular transactions (we use that in the marketplace canister).
 - `--icp` is the transfer amount
 - `--fee` is the transaction fee. In this case it's 0 because we make this transfer as the minter idenity thus this transaction is of type MINT, not TRANSFER.
 - `<ADDRESS>` is the address of the recipient. To get the address from the principal, you can use the helper function from the marketplace canister - `getAddressFromPrincipal(principal: Principal)`, it can be called via the Candid UI.
 
+### ICRC2 ledger canister
+
+`deploy-local-icrc-ledger.sh` - deploys an ICRC2 canister.
+
+Transfer ICRC token:
+`dfx canister call icrc1_ledger_canister icrc1_transfer '(record { to = record { owner = principal "<PRINCIPAL>";};  amount = <AMOUNT>;})'`
+where:
+- `<PRINCIPAL>` is the principal string of the receiver
+- `<AMOUNT>` is the amount of token to be transferred
 
 ### Internet identity canister
 
-`dfx deploy internet_identity` - that is the canister that handles the authentication flow. Once it's deployed, the `js-agent` library will be talking to it to register identities. There is UI that acts as a wallet where you can select existing identities
+`deploy-local-identity.sh` - deploys an identity canister and outputs the canister id to `.env` as the `IDENTITY_CANISTER_ID` variable. Once it's deployed, the `js-agent` library will be talking to it to register identities. There is UI that acts as a wallet where you can select existing identities
 or create a new one.
 
 ### Marketplace canister
 
-`dfx deploy dfinity_js_backend` - deploys the marketplace canister where the business logic is implemented.
-Basically, it implements functions like add, view, update, delete, and buy products + a set of helper functions.
+Switch to the default identity:
+`dfx identity use default`
 
-Do not forget to run `dfx generate dfinity_js_backend` anytime you add/remove functions in the canister or when you change the signatures.
-Otherwise, these changes won't be reflected in IDL's and won't work when called using the JS agent.
+`deploy-local-backend-canister.sh` - deploys the marketplace canister where the business logic is implemented and outputs the canister id to `.env` as the `BACKEND_CANISTER_ID` variable.
+Basically, it implements functions like add, view, update, delete, and buy products + a set of helper functions.
 
 ### Marketplace frontend canister
 `dfx deploy dfinity_js_frontend` - deployes the frontend app for the `dfinity_js_backend` canister on IC.
