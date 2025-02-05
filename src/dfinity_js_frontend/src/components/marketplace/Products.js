@@ -2,13 +2,17 @@ import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import AddProduct from "./AddProduct";
 import Product from "./Product";
-import Loader from "../utils/Loader";
+import Loader from "../../utils/Loader";
 import { Row } from "react-bootstrap";
 
-import { NotificationSuccess, NotificationError } from "../utils/Notifications";
+import {
+  NotificationSuccess,
+  NotificationError,
+} from "../../utils/Notifications";
 import {
   getProducts as getProductList,
-  createProduct, buyProduct
+  createProduct,
+  buyProduct,
 } from "../../utils/marketplace";
 
 const Products = () => {
@@ -31,7 +35,7 @@ const Products = () => {
     try {
       setLoading(true);
       const priceStr = data.price;
-      data.price = parseInt(priceStr, 10) * 10**8;
+      data.price = parseInt(priceStr, 10) * 10 ** 8;
       createProduct(data).then((resp) => {
         getProducts();
       });
@@ -49,7 +53,7 @@ const Products = () => {
     try {
       setLoading(true);
       await buyProduct({
-        id
+        id,
       }).then((resp) => {
         getProducts();
         toast(<NotificationSuccess text="Product bought successfully" />);

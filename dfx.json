@@ -17,17 +17,19 @@
       }
     },
     "dfinity_js_backend": {
-      "type": "custom",
+      "type": "azle",
       "main": "src/dfinity_js_backend/src/index.ts",
-      "candid": "src/dfinity_js_backend/src/index.did",
-      "build": "npx azle dfinity_js_backend",
-      "wasm": ".azle/dfinity_js_backend/dfinity_js_backend.wasm",
-      "gzip": true
+      "candid_gen": "http",
+      "declarations": {
+        "output": ".azle/dfx_generated/pionext_backend",
+        "node_compatibility": true
+      },
+      "custom": {
+        "experimental": true
+      }
     },
     "dfinity_js_frontend": {
-      "dependencies": [
-        "dfinity_js_backend"
-      ],
+      "dependencies": ["dfinity_js_backend"],
       "frontend": {
         "entrypoint": "src/dfinity_js_frontend/src/index.html"
       },
@@ -35,8 +37,7 @@
         "src/dfinity_js_frontend/src/assets",
         "dist/dfinity_js_frontend/"
       ],
-      "type": "assets",
-      "gzip": true
+      "type": "assets"
     }
   },
   "defaults": {
